@@ -42,17 +42,7 @@ void printColoredPixel(uint8_t red, uint8_t green, uint8_t blue, int width = 2){
     std::cout << "\033[0m";
 }
 
-int main(int argc, char* argv[]){
-    std::istream* input = &std::cin;
-    std::string file;
-    
-    if (argc == 1) {
-        std::cout << "Enter bitmap file: ";
-        std::cin >> file;
-    } else {
-        file = argv[1];
-    }
-
+int parseBitmapFile(std::string file){
     std::ifstream bmp;
     bmp.open(file, std::ios::binary);
     
@@ -64,13 +54,12 @@ int main(int argc, char* argv[]){
     
     BMPHeader header;
     bmp.read(reinterpret_cast<char*>(&header), 14);
-    
     if (header.signature != 0x4D42) {
         std::cerr << "Not a valid BMP File!" << std::endl;
         return 1;
     }
 
-    BitmapInfoHeader infoHeader;
+    BitmapInfoHeader infoHeader; // BITMAPINFOHEADER area of file
     bmp.read(reinterpret_cast<char*>(&infoHeader), 40);
     bmp.seekg(header.pixelDataOffset);
 
@@ -79,7 +68,6 @@ int main(int argc, char* argv[]){
     int totalBytes = bytesPerRow * infoHeader.height; // total bytes per row with padding
 
     std::vector<uint8_t> pixelData;
-
     pixelData.resize(totalBytes);
     bmp.read(reinterpret_cast<char*>(pixelData.data()), totalBytes);
     
@@ -93,7 +81,20 @@ int main(int argc, char* argv[]){
         }
         std::cout << "\n";
     }
-    
     bmp.close();
+    return 0;
+};
+
+int main(int argc, char* argv[]){
+    std::istream* input = &std::cin;
+    std::string bitmap;
+    
+    if (argc >= 2) {
+        parseBitmapFile(argv[1]);
+    } else {
+        std::cout << "Enter bitmap file: ";
+        std::cin >> bitmap;
+        parseBitmapFile(bitmap);
+    }
     return 0;
 }
