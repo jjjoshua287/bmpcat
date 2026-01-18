@@ -2,8 +2,16 @@
 A bitmap parser and terminal viewer using ANSI escape codes for color, written in C++
 
 ## Usage
+
+### Linux
 ```bash
-./bmpcat <image.bmp>
+chmod +x bmpcat-linux-x64
+./bmpcat-linux-x64 image.bmp
+```
+
+#### Windows
+```cmd
+bmpcat-windows-x64.exe image.bmp
 ```
 
 Or run without arguments and enter it:
