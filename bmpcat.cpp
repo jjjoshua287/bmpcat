@@ -75,7 +75,6 @@ int main(int argc, char* argv[]){
     bmp.seekg(header.pixelDataOffset);
 
     int bytesPerPixel = infoHeader.bitsPerPixel / 8;
-    //int pixelBytes = infoHeader.width * infoHeader.height * bytesPerPixel; // No Padding
     int bytesPerRow = ((infoHeader.width * bytesPerPixel + 3) / 4) * 4; // Bytes per row with Padding
     int totalBytes = bytesPerRow * infoHeader.height; // total bytes per row with padding
 
@@ -86,7 +85,6 @@ int main(int argc, char* argv[]){
     
     for (int i = infoHeader.height - 1; i >= 0; i--){ // Represents the row
         for (int j = 0; j < infoHeader.width; j++) { // Represents the column
-            //int index = (i * infoHeader.width * bytesPerPixel) + (j * bytesPerPixel);
             int index = (i * bytesPerRow) + (j * bytesPerPixel); 
             uint8_t blue = pixelData[index];
             uint8_t green = pixelData[index + 1];
